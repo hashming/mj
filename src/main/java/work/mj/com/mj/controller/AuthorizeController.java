@@ -7,6 +7,9 @@ import work.mj.com.mj.dto.AccessTokenDto;
 import work.mj.com.mj.dto.GithubUser;
 import work.mj.com.mj.provider.GithubProvider;
 
+/**
+ * github认证有关
+ */
 public class AuthorizeController {
 
     @Autowired
