@@ -1,6 +1,8 @@
 package work.mj.com.mj.controller;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +36,7 @@ public class IndexController {
     }
 
     //这个是Login中的dologin方法  post
-    @PostMapping("/doLogin")
+    /*@PostMapping("/doLogin")
     public String doLogin(User user) {
         if (user != null) {
             //如果账号密码正确跳转到index
@@ -45,7 +47,28 @@ public class IndexController {
         }
         //否则跳转到密码错误页面
         return "passwordError";
+    }*/
+
+    //shiro更改后的
+    @PostMapping("/doLogin")
+    public String doLogin(User user) {
+        if (user != null) {
+            Subject subject = SecurityUtils.getSubject();
+            UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+            try {
+//                如果账号密码都正确不会抛出异常
+//                shiro 认证 当认证失败时会抛出异常
+                //try catch 处理掉异常
+                subject.login(token);
+                return "index";
+            } catch (Exception e) {
+                return "passwordError";
+            }
+        }
+        //否则跳转到密码错误页面
+        return "passwordError";
     }
+
 
     //登录方法 登录界面
     @RequestMapping("/login")
