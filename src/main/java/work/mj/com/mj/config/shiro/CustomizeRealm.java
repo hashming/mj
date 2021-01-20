@@ -21,7 +21,7 @@ public class CustomizeRealm extends AuthorizingRealm {
     private UserService userService;
 
     /**
-     * 权限认证 暂时不使用
+     * 权限认证 暂时不使用  授权
      *
      * @param principals
      * @return
@@ -40,6 +40,7 @@ public class CustomizeRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+
 //        获取登录令牌用户名  这个是获取用户名
         String username = (String) token.getPrincipal();
         //得到密码
@@ -53,7 +54,7 @@ public class CustomizeRealm extends AuthorizingRealm {
         if (user == null) {
             throw new AuthenticationException();
         }
-        //简单身份验证信息
+        //简单身份验证信息  参数：用户输入的用户名，其真正的密码
         return new SimpleAuthenticationInfo(username, user.getPassword(), "pb");
     }
 }
