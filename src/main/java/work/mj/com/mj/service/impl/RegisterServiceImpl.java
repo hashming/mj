@@ -15,13 +15,19 @@ public class RegisterServiceImpl implements RegisterService {
     private RegisterMapper registerMapper;
 
     @Override
-    public void setRegister(String registername) {
+    public void setRegister(String registername,String token) {
         Register register = new Register();
-        register.setToken(UUID.randomUUID().toString());
+        register.setToken(token);
         register.setName(registername);
         register.setAccountId("test");
         register.setGmtCreate(System.currentTimeMillis());
         register.setGmtModified(register.getGmtCreate());
         registerMapper.insert(register);
+    }
+
+    @Override
+    public Register findByToken(String token) {
+        Register register = registerMapper.findByToken(token);
+        return register;
     }
 }

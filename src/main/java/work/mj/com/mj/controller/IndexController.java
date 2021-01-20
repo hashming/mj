@@ -18,7 +18,10 @@ import work.mj.com.mj.service.LoginUser;
 import work.mj.com.mj.service.RegisterService;
 import work.mj.com.mj.service.UserService;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 @Controller
 public class IndexController {
@@ -33,14 +36,24 @@ public class IndexController {
     private RegisterService registerService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request){
-        //看看session在不在
-//        System.out.println(request.getSession().getAttribute("name"));
+    public String index(HttpServletRequest request) {
+        //遍历cookie 寻找名字是token的那个
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (cookie.getName().equals("token")) {
+                String token = cookie.getValue();
+                Register register = registerService.findByToken(token);
+                if (register != null) {
+                    request.getSession().setAttribute("name", register);
+                }
+                break;
+            }
+        }
         return "index";
     }
 
     @GetMapping("/hello")
-    public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+    public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
         //浏览器传过来的值放在model中
         model.addAttribute("name", name);
         return "index";//返回首页
@@ -54,22 +67,21 @@ public class IndexController {
 
     //shiro更改后的
     @PostMapping("/doLogin")
-    public String doLogin(User user, HttpServletRequest request) {
+    public String doLogin(User user, HttpServletRequest request, HttpServletResponse response) {
         if (user != null) {
             Subject subject = SecurityUtils.getSubject();
             UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
+            System.out.println(token);
             try {
 //                如果账号密码都正确不会抛出异常
 //                shiro 认证 当认证失败时会抛出异常
                 //try catch 处理掉异常
                 subject.login(token);
 
+                String idtoken = UUID.randomUUID().toString();
                 //存入数据库
-                registerService.setRegister(user.getUsername());
-
-                //如果没有异常的情况下就会写入name到Session中。
-                request.getSession().setAttribute("name",user.getUsername());
-                System.out.println(request.getSession().getAttribute("name"));
+                registerService.setRegister(user.getUsername(), idtoken);
+                response.addCookie(new Cookie("token", idtoken));
                 return "redirect:/";
             } catch (Exception e) {
                 return "passwordError";
