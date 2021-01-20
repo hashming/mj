@@ -1,0 +1,1 @@
+alter table register add bio varchar(256) null;

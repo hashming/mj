@@ -3,9 +3,16 @@ spring:
     url: jdbc:mysql://localhost:3306/myplus?characterEncoding=utf-8&serverTimezone=GMT%2B8
     username: root
     password: root
+  flyway:
+    enabled: true
+    encoding: UTF-8
+    baseline-on-migrate: true
+    baseline-version=0:
+
 
 mybatis:
-  ##xml文件的路径配置
+  ##mybatis plus
   mapper-locations:
     classpath: mapper/*.xml
   type-aliases-package: work.mj.com.mj.pojo
+
