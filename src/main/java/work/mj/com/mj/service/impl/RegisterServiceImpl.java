@@ -16,12 +16,16 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public void setRegister(String registername,String token) {
+        //头像链接
+        String avatar_url = "https://profile.csdnimg.cn/C/8/1/2_haoduoduoyu";
+        //登录的用户信息数据库
         Register register = new Register();
         register.setToken(token);
         register.setName(registername);
         register.setAccountId("test");
         register.setGmtCreate(System.currentTimeMillis());
         register.setGmtModified(register.getGmtCreate());
+        register.setAvatarUrl(avatar_url);
         registerMapper.insert(register);
     }
 

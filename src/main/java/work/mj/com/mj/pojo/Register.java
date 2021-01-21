@@ -13,4 +13,5 @@ public class Register {
     private String token;
     private Long gmtCreate;
     private Long gmtModified;
+    private String avatarUrl;
 }

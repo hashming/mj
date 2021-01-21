@@ -8,7 +8,7 @@ import work.mj.com.mj.pojo.Register;
 
 @Mapper
 public interface RegisterMapper {
-    @Insert("insert into register (name,account_id,token,gmt_create,gmt_modified) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified})")
+    @Insert("insert into register (name,account_id,token,gmt_create,gmt_modified,avatar_url) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
     void insert(Register register);
 
     @Select("select * from register where token = #{token}")

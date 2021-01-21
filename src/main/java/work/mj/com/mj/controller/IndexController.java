@@ -39,24 +39,18 @@ public class IndexController {
     public String index(HttpServletRequest request) {
         //遍历cookie 寻找名字是token的那个
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")) {
-                String token = cookie.getValue();
-                Register register = registerService.findByToken(token);
-                if (register != null) {
-                    request.getSession().setAttribute("name", register);
+        if (cookies != null && cookies.length != 0)
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    Register register = registerService.findByToken(token);
+                    if (register != null) {
+                        request.getSession().setAttribute("name", register);
+                    }
+                    break;
                 }
-                break;
             }
-        }
         return "index";
-    }
-
-    @GetMapping("/hello")
-    public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World") String name, Model model) {
-        //浏览器传过来的值放在model中
-        model.addAttribute("name", name);
-        return "index";//返回首页
     }
 
     //登录方法 登录界面

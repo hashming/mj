@@ -23,14 +23,19 @@ public class PublishController {
     @Autowired
     private RegisterService registerService;
 
+    /**
+     * 跳转到pubish页面也就是发布页面
+     * @return
+     */
     @GetMapping("/publish")
     public String publish() {
         return "publish";
     }
 
     /**
-     * 提交问题的操作
+     * 点击发布按钮 发布问题
      * model.addAttribute是向前端传数据的
+     * @RequestParam来获取前端name属性定义的与之对应的参数的值
      * @param title
      * @param description
      * @param tag
@@ -62,22 +67,26 @@ public class PublishController {
 
         Register register = null;
         Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")) {
-                String token = cookie.getValue();
-                register = registerService.findByToken(token);
-                if (register != null) {
-                    request.getSession().setAttribute("name", register);
+        //当浏览器又cookie的时候才执行下面的方法，不然直接遍历就会抛出空指针异常
+        if (cookies != null && cookies.length != 0)
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    String token = cookie.getValue();
+                    register = registerService.findByToken(token);
+                    if (register != null) {
+                        request.getSession().setAttribute("name", register);
+                    }
+                    break;
                 }
-                break;
             }
-        }
 
+        //如果这里发现并没有对应的cookie那么就要重新跳回
         if (register == null) {
             model.addAttribute("error", "用户未登录");
             return "publish";
         }
 
+        //存入数据库
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
