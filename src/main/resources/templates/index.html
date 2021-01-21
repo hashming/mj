@@ -31,7 +31,7 @@
                 <button type="submit" class="btn btn-default">搜索</button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <li th:if="${session.user != null}">
+                <li th:if="${session.name != null}">
                     <a href="/publish">发布</a>
                 </li>
                 <!--               如果session中有name属性那么就不显示登录按钮-->

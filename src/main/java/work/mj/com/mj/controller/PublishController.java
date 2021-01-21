@@ -30,6 +30,7 @@ public class PublishController {
 
     /**
      * 提交问题的操作
+     * model.addAttribute是向前端传数据的
      * @param title
      * @param description
      * @param tag
