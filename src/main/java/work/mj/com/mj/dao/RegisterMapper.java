@@ -13,7 +13,4 @@ public interface RegisterMapper {
 
     @Select("select * from register where token = #{token}")
     Register findByToken(@Param("token") String token);
-
-    @Select("select * from register where id = #{id}")
-    Register findById(@Param("id")Integer id);
 }
