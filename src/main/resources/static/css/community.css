@@ -11,3 +11,13 @@ body {
     float: right;
     margin-bottom: 15px;
 }
+
+.media-object {
+    width: 64px;
+    height: 64px;
+}
+.text-desc {
+    font-size: 12px;
+    font-weight: normal;
+    color: #999;
+}
