@@ -12,15 +12,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import work.mj.com.mj.dto.QuestionDTO;
 import work.mj.com.mj.pojo.Register;
 import work.mj.com.mj.pojo.User;
 import work.mj.com.mj.service.LoginUser;
+import work.mj.com.mj.service.QuestionService;
 import work.mj.com.mj.service.RegisterService;
 import work.mj.com.mj.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.UUID;
 
 @Controller
@@ -35,8 +38,11 @@ public class IndexController {
     @Autowired
     private RegisterService registerService;
 
+    @Autowired
+    private QuestionService questionService;
+
     @GetMapping("/")
-    public String index(HttpServletRequest request) {
+    public String index(HttpServletRequest request,Model model) {
         //遍历cookie 寻找名字是token的那个
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0)
@@ -50,6 +56,12 @@ public class IndexController {
                     break;
                 }
             }
+
+
+        List<QuestionDTO> questionDTOList = questionService.list();
+            //列表信息回显到前端
+        model.addAttribute("questions",questionDTOList);
+
         return "index";
     }
 
