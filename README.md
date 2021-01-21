@@ -4,7 +4,7 @@
 ## 数据库文件
 
 ```sql
-CREATE DATABASE `test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci
+CREATE DATABASE `test` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 
 CREATE TABLE `user`  (
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,

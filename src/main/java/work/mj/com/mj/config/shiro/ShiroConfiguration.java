@@ -66,7 +66,7 @@ public class ShiroConfiguration {
         //这里我把主页的权限放开
         filterChainDefinitionMap.put("/", "anon");
         //对其他的资源开启权限认证
-        filterChainDefinitionMap.put("/**", "authc");
+//        filterChainDefinitionMap.put("/**", "authc");
         filterChainDefinitionMap.put("/logout", "logout");
         return filterChainDefinitionMap;
     }
