@@ -14,29 +14,15 @@ public class PaginationDTO {
     private boolean showEndPage;//末尾页
     private Integer page;
     private List<Integer> pages = new ArrayList<>();
-    private Integer totalPage;
+    private Integer totalPage;//当前页
 
     /**
      * 设置分页
-     * @param totalCount  总数据数
+     * @param totalPage  当前页数
      * @param page   总页数
-     * @param size   单页数据数
      */
-    public void setPagination(Integer totalCount, Integer page, Integer size) {
-        //很神奇  这里获取当前的页码
-        if (totalCount % size == 0) {
-            totalPage = totalCount / size;
-        } else {
-            totalPage = totalCount / size + 1;
-        }
-
-        if (page < 1) {
-            page = 1;
-        }
-
-        if (page > totalPage) {
-            page = totalPage;
-        }
+    public void setPagination(Integer totalPage, Integer page) {
+        this.totalPage = totalPage;
 
         this.page = page;
 
