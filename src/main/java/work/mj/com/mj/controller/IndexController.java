@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import work.mj.com.mj.dto.PaginationDTO;
 import work.mj.com.mj.dto.QuestionDTO;
 import work.mj.com.mj.pojo.Register;
 import work.mj.com.mj.pojo.User;
@@ -42,7 +43,8 @@ public class IndexController {
     private QuestionService questionService;
 
     @GetMapping("/")
-    public String index(HttpServletRequest request,Model model) {
+    public String index(HttpServletRequest request,Model model,@RequestParam(name = "page", defaultValue = "1") Integer page,
+                        @RequestParam(name = "size", defaultValue = "5") Integer size) {
         //遍历cookie 寻找名字是token的那个
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0)
@@ -57,10 +59,8 @@ public class IndexController {
                 }
             }
 
-
-        List<QuestionDTO> questionDTOList = questionService.list();
-            //列表信息回显到前端
-        model.addAttribute("questions",questionDTOList);
+        PaginationDTO pagination = questionService.list(page, size);
+        model.addAttribute("pagination", pagination);
 
         return "index";
     }
