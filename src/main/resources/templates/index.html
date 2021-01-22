@@ -42,7 +42,10 @@
                 </li>
                 <li class="dropdown" th:if="${session.name}">
                     <a href="#" data-toggle="dropdown" role="button" aria-haspopup="true"
-                       aria-expanded="false" th:text="${session.name.getName()}" class="glyphicon glyphicon-menu-down"> <span class="caret"></span></a>
+                       aria-expanded="false" class="dropdown-toggle">
+                        <span th:text="${session.name.getName()}"/>
+                        <span class="caret"></span>
+                    </a>
                     <ul class="dropdown-menu">
                         <li><a href="#">消息中心</a></li>
                         <li><a href="#">个人资料</a></li>
