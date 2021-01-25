@@ -1,41 +1,31 @@
 package work.mj.com.mj.controller;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.IncorrectCredentialsException;
+import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import work.mj.com.mj.dto.PaginationDTO;
-import work.mj.com.mj.dto.QuestionDTO;
 import work.mj.com.mj.pojo.Register;
 import work.mj.com.mj.pojo.User;
-import work.mj.com.mj.service.LoginUser;
 import work.mj.com.mj.service.QuestionService;
 import work.mj.com.mj.service.RegisterService;
-import work.mj.com.mj.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.UUID;
 
-
 @Controller
-public class IndexController {
-
-    @Autowired
-    private LoginUser loginUser;
-
-    @Autowired
-    private UserService userService;
+public class ShiroController {
 
     @Autowired
     private RegisterService registerService;
@@ -43,14 +33,13 @@ public class IndexController {
     @Autowired
     private QuestionService questionService;
 
-    /*@GetMapping("/")
-    public String index(HttpServletRequest request,Model model,@RequestParam(name = "page", defaultValue = "1") Integer page,
+    @GetMapping("/")
+    public String index(HttpServletRequest request, Model model, @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size) {
 
         Subject subject = SecurityUtils.getSubject();
         System.out.println(subject);
 
-        //遍历cookie 寻找名字是token的那个
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length != 0)
             for (Cookie cookie : cookies) {
@@ -68,39 +57,58 @@ public class IndexController {
         model.addAttribute("pagination", pagination);
 
         return "index";
-    }*/
+    }
 
-    /*//登录方法 登录界面
+    //登录方法 登录界面
     @RequestMapping("/login")
     public String login() {
         return "login";
     }
 
-    //shiro更改后的
-    @PostMapping("/doLogin")
-    public String doLogin(User user, HttpServletRequest request, HttpServletResponse response) {
-        if (user != null) {
+    //未授权页面
+    @RequestMapping("/unAuthor")
+    public String unAuthor() {
+        return "unAuthor";
+    }
+
+    //注销页面
+    @RequestMapping("/logout")
+    public String logout() {
+        return "login";
+    }
+
+    //
+    @RequestMapping("/doLogin")
+    public String doLogin(User user, Model model, HttpServletResponse response) {
+        if (user!=null) {
+
+//            System.out.println(check);
+            //获取当前的用户
             Subject subject = SecurityUtils.getSubject();
+            //封装用户的登陆数据
             UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
-            System.out.println(token);
+//            token.setRememberMe(true);
             try {
-                //引用shiro登录验证
                 subject.login(token);
 
-                //登录成功
                 String idtoken = UUID.randomUUID().toString();
                 //存入register数据库
                 registerService.setRegister(user.getUsername(), idtoken);
+
+                Session session = subject.getSession();
+                session.setAttribute("token",idtoken);
+
                 response.addCookie(new Cookie("token", idtoken));
+
                 return "redirect:/";
-            } catch (Exception e) {
-                String s = token.getPrincipal().toString();
-                System.out.println(s);
-                //登录失败
+            } catch (UnknownAccountException e) {
+                model.addAttribute("msg", "用户名错误");
+                return "passwordError";
+            } catch (IncorrectCredentialsException e) {
+                model.addAttribute("msg", "密码错误");
                 return "passwordError";
             }
         }
-        //否则跳转到密码错误页面
         return "passwordError";
-    }*/
+    }
 }
