@@ -34,6 +34,7 @@ public class SessionInterceptor implements HandlerInterceptor {
                 }
             }
         return true;*/
+        return true;
     }
 
     //controller执行之后，且页面渲染之前调用
