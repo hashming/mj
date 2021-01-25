@@ -28,4 +28,8 @@ public interface QuestionMapper {
     //特定用户发布的问题
     @Select("select count(1) from question where creator = #{registerId}")
     Integer countByUserId(@Param("registerId") Integer registerId);
+
+    //根据用户查询问题
+    @Select("select * from question where id = #{id}")
+    Question getById(@Param("id") Integer id);
 }

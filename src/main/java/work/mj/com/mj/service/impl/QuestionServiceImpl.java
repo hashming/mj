@@ -119,6 +119,20 @@ public class QuestionServiceImpl implements QuestionService {
         return paginationDTO;
     }
 
+    /**
+     * 根据问题ID查找问题详情
+     * @param id
+     * @return
+     */
+    @Override
+    public QuestionDTO getById(Integer id) {
+        Question question = questionMapper.getById(id);
+        QuestionDTO questionDTO = new QuestionDTO();
+        BeanUtils.copyProperties(question, questionDTO);
+        Register register = registerMapper.findById(question.getCreator());
+        questionDTO.setRegister(register);
+        return questionDTO;
+    }
 
 
 }
