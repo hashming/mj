@@ -3,11 +3,11 @@
 <head>
     <title>发布问题</title>
     <meta http-equiv="Content-Type"/>
-    <script src="js/jquery.min.js"></script>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="css/community.css">
-    <script src="js/bootstrap.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="/js/bootstrap.min.js"></script>
 </head>
 <body>
 
@@ -20,6 +20,8 @@
             <hr>
 
             <form action="/publish" method="post">
+<!--                获取前端存放的id变量到 name="id"这个属性，然后传递给后端-->
+                <input type="hidden" name="id" th:value="${id}">
                 <div class="form-group">
                     <label for="title">问题标题（简单扼要）:</label>
                     <input type="text" class="form-control" th:value="${title}" id="title" name="title"

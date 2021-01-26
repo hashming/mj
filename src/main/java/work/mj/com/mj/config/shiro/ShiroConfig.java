@@ -25,7 +25,7 @@ public class ShiroConfig {
         //授权
 //        hashMap.put("/publish","perms[user:add]");
         //authc是要开启登录验证
-        hashMap.put("/","authc");
+//        hashMap.put("/","authc");
         hashMap.put("/js/**","anon");
         hashMap.put("/css/**","anon");
         hashMap.put("/fonts/**","anon");

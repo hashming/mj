@@ -139,6 +139,24 @@ public class QuestionServiceImpl implements QuestionService {
         return questionDTO;
     }
 
+    /**
+     * 判断id是否存在，如果存在就更新，如果不存在就创建
+     * @param question
+     */
+    @Override
+    public void createOrUpdate(Question question) {
+        //判断是否存在对应的id
+        if (question.getId() == null) {
+            //创建
+            question.setGmtCreate(System.currentTimeMillis());
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.create(question);
+        } else {
+            //更新
+            question.setGmtModified(question.getGmtCreate());
+            questionMapper.update(question);
+        }
+    }
 
 
 }
