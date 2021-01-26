@@ -73,8 +73,14 @@ public class ShiroController {
 
     //注销页面
     @RequestMapping("/logout")
-    public String logout() {
-        return "login";
+    public String logout(HttpServletRequest request,HttpServletResponse response) {
+
+        request.getSession().removeAttribute("name");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "redirect:/";
     }
 
     //
