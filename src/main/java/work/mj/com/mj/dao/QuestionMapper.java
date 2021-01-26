@@ -1,9 +1,6 @@
 package work.mj.com.mj.dao;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 import work.mj.com.mj.pojo.Question;
 
 import java.util.List;
@@ -32,4 +29,7 @@ public interface QuestionMapper {
     //根据用户查询问题
     @Select("select * from question where id = #{id}")
     Question getById(@Param("id") Integer id);
+
+    @Update("UPDATE question SET view_count = view_count+1 WHERE id = #{id}")
+    Boolean updateViewCountById(@Param("id") Integer id);
 }

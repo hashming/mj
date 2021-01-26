@@ -126,13 +126,19 @@ public class QuestionServiceImpl implements QuestionService {
      */
     @Override
     public QuestionDTO getById(Integer id) {
+
+        Boolean ce = questionMapper.updateViewCountById(id);
+        System.out.println(ce);
+
         Question question = questionMapper.getById(id);
+
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
         Register register = registerMapper.findById(question.getCreator());
         questionDTO.setRegister(register);
         return questionDTO;
     }
+
 
 
 }

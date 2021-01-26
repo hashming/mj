@@ -56,7 +56,7 @@ public class UserRealm extends AuthorizingRealm {
         //这里可以加一个session存储
         Subject subject = SecurityUtils.getSubject();
         Session session = subject.getSession();
-        session.setAttribute("username",user.getUsername());
+        session.setAttribute("name",user);
 
         //这里把user放入  授权的时候就可以用了
         return new SimpleAuthenticationInfo(user, user.getPassword(), "");

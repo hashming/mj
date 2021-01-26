@@ -26,6 +26,9 @@ public class ShiroConfig {
 //        hashMap.put("/publish","perms[user:add]");
         //authc是要开启登录验证
         hashMap.put("/","authc");
+        hashMap.put("/js/**","anon");
+        hashMap.put("/css/**","anon");
+        hashMap.put("/fonts/**","anon");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(hashMap);
         //登录成功跳转的页面
