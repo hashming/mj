@@ -9,11 +9,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import work.mj.com.mj.dao.RegisterMapper;
 import work.mj.com.mj.dto.PaginationDTO;
 import work.mj.com.mj.pojo.Register;
+import work.mj.com.mj.pojo.RegisterExample;
 import work.mj.com.mj.service.QuestionService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.Cookie;
+import java.util.List;
 
+//个人问题列表
 @Controller
 public class ProfileController {
     @Autowired
@@ -34,9 +37,11 @@ public class ProfileController {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")) {
                     String token = cookie.getValue();
-                    register = registerMapper.findByToken(token);
-                    if (register != null) {
-                        request.getSession().setAttribute("name", register);
+                    RegisterExample registerExample = new RegisterExample();
+                    registerExample.createCriteria().andTokenEqualTo(token);
+                    List<Register> registers = registerMapper.selectByExample(registerExample);
+                    if (registers.size() != 0) {
+                        request.getSession().setAttribute("name",registers.get(0));
                     }
                     break;
                 }

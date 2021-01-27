@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan("work.mj.com.mj.dao")//操作数据库的接口文件的位置
+@MapperScan("work.mj.com.mj.dao")
 public class MjApplication {
 
     public static void main(String[] args) {

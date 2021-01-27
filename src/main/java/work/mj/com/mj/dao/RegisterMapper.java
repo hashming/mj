@@ -1,19 +1,36 @@
 package work.mj.com.mj.dao;
 
-import org.apache.ibatis.annotations.Insert;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 import work.mj.com.mj.pojo.Register;
+import work.mj.com.mj.pojo.RegisterExample;
 
 @Mapper
 public interface RegisterMapper {
-    @Insert("insert into register (name,account_id,token,gmt_create,gmt_modified,avatar_url) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{avatarUrl})")
-    void insert(Register register);
+    int countByExample(RegisterExample example);
 
-    @Select("select * from register where token = #{token}")
-    Register findByToken(@Param("token") String token);
+    int deleteByExample(RegisterExample example);
 
-    @Select("select * from register where id = #{id}")
-    Register findById(@Param("id")Integer id);
+    int deleteByPrimaryKey(Integer id);
+
+    int insert(Register record);
+
+    int insertSelective(Register record);
+
+    List<Register> selectByExample(RegisterExample example);
+
+    Register selectByPrimaryKey(Integer id);
+
+    int updateByExampleSelective(@Param("record") Register record, @Param("example") RegisterExample example);
+
+    int updateByExample(@Param("record") Register record, @Param("example") RegisterExample example);
+
+    int updateByPrimaryKeySelective(Register record);
+
+    int updateByPrimaryKey(Register record);
+
+    //根据token查询对应的Register
+    Register selectByToken(String token);
 }

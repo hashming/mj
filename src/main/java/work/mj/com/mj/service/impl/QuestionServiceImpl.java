@@ -1,5 +1,7 @@
 package work.mj.com.mj.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import work.mj.com.mj.dao.RegisterMapper;
 import work.mj.com.mj.dto.PaginationDTO;
 import work.mj.com.mj.dto.QuestionDTO;
 import work.mj.com.mj.pojo.Question;
+import work.mj.com.mj.pojo.QuestionExample;
 import work.mj.com.mj.pojo.Register;
 import work.mj.com.mj.service.QuestionService;
 
@@ -35,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
         PaginationDTO paginationDTO = new PaginationDTO();
         Integer totalPage;
         //问题总数
-        Integer totalCount = questionMapper.count();
+        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
 
         //把
         if (totalCount % size == 0) {
@@ -55,12 +58,13 @@ public class QuestionServiceImpl implements QuestionService {
         paginationDTO.setPagination(totalPage,page);
         Integer offset = size * (page - 1);
         //截取一段数据
-        List<Question> questions = questionMapper.list(offset, size);
+        PageHelper.startPage(offset, size);
+        List<Question> questions = questionMapper.selectByExample(new QuestionExample());
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         //把用户信息拼接到QuestionDto中
         for (Question question : questions) {
-            Register user = registerMapper.findById(question.getCreator());
+            Register user = registerMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setRegister(user);
@@ -82,7 +86,7 @@ public class QuestionServiceImpl implements QuestionService {
 
         Integer totalPage;
 
-        Integer totalCount = questionMapper.countByUserId(registerId);
+        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
 
         if (totalCount % size == 0) {
             totalPage = totalCount / size;
@@ -104,11 +108,15 @@ public class QuestionServiceImpl implements QuestionService {
         if (offset<0){
             offset = 0;
         }
-        List<Question> questions = questionMapper.listByUserId(registerId, offset, size);
+        PageHelper.startPage(offset, size);
+        //创建 Example 对象
+        QuestionExample example= new QuestionExample() ;
+        example.createCriteria().andCreatorEqualTo(registerId);
+        List<Question> questions = questionMapper.selectByExample(example);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         for (Question question : questions) {
-            Register user = registerMapper.findById(question.getCreator());
+            Register user = registerMapper.selectByPrimaryKey(question.getCreator());
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setRegister(user);
@@ -127,14 +135,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public QuestionDTO getById(Integer id) {
 
-        Boolean ce = questionMapper.updateViewCountById(id);
-        System.out.println(ce);
-
-        Question question = questionMapper.getById(id);
+        Question question = questionMapper.selectByPrimaryKey(id);
 
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question, questionDTO);
-        Register register = registerMapper.findById(question.getCreator());
+        Register register = registerMapper.selectByPrimaryKey(question.getCreator());
         questionDTO.setRegister(register);
         return questionDTO;
     }
@@ -150,11 +155,13 @@ public class QuestionServiceImpl implements QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.create(question);
+            questionMapper.insert(question);
+//            questionMapper.create(question);
         } else {
             //更新
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.update(question);
+            questionMapper.updateByPrimaryKey(question);
+//            questionMapper.update(question);
         }
     }
 

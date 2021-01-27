@@ -9,10 +9,12 @@ spring:
     baseline-on-migrate: true
     baseline-version=0:
 
-
+#mybatis配置
 mybatis:
-  ##mybatis plus
-  mapper-locations:
-    classpath: mapper/*.xml
+  #配置SQL映射文件路径
+  mapper-locations: classpsth:mapper/*.xml
+  #配置别名
   type-aliases-package: work.mj.com.mj.pojo
-
+  #驼峰命名
+  configuration:
+    map-underscore-to-camel-case: true
