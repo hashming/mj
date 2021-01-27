@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import work.mj.com.mj.dao.RegisterMapper;
 import work.mj.com.mj.pojo.Register;
-import work.mj.com.mj.pojo.RegisterExample;
 import work.mj.com.mj.service.RegisterService;
 
 import java.util.UUID;

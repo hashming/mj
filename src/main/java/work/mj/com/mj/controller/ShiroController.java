@@ -32,6 +32,14 @@ public class ShiroController {
     @Autowired
     private QuestionService questionService;
 
+    /**
+     * 分页显示所有问题的列表
+     * @param request
+     * @param model
+     * @param page  当前页数
+     * @param size  页面数据大小
+     * @return
+     */
     @GetMapping("/")
     public String index(HttpServletRequest request, Model model, @RequestParam(name = "page", defaultValue = "1") Integer page,
                         @RequestParam(name = "size", defaultValue = "5") Integer size) {
@@ -82,17 +90,21 @@ public class ShiroController {
         return "redirect:/";
     }
 
-    //
+    /**
+     * 登录操作
+     * @param user  用户名 用户密码
+     * @param model
+     * @param response
+     * @return
+     */
     @RequestMapping("/doLogin")
     public String doLogin(User user, Model model, HttpServletResponse response) {
         if (user!=null) {
 
-//            System.out.println(check);
             //获取当前的用户
             Subject subject = SecurityUtils.getSubject();
             //封装用户的登陆数据
             UsernamePasswordToken token = new UsernamePasswordToken(user.getUsername(), user.getPassword());
-//            token.setRememberMe(true);
             try {
                 subject.login(token);
 

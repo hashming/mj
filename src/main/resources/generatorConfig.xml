@@ -36,8 +36,10 @@
         <!--指定生成mapper接口的的路径-->
         <javaClientGenerator type="XMLMAPPER" targetPackage="work.mj.com.mj.dao" targetProject="E:\progra\idea_java\mj\src\main\java"/>
         <!--生成全部表tableName设为%-->
-        <!--<table tableName="register" domainObjectName="Register"></table>
-        <table tableName="question" domainObjectName="Question"></table>-->
+        <table tableName="register" domainObjectName="Register"></table>
+        <table tableName="question" domainObjectName="Question">
+            <columnOverride column="description" jdbcType="VARCHAR"></columnOverride>
+        </table>
         <table tableName="user" domainObjectName="User"></table>
     </context>
 </generatorConfiguration>

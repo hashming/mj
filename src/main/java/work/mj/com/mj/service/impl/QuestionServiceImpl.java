@@ -59,7 +59,7 @@ public class QuestionServiceImpl implements QuestionService {
         Integer offset = size * (page - 1);
         //截取一段数据
         PageHelper.startPage(offset, size);
-        List<Question> questions = questionMapper.selectByExample(new QuestionExample());
+        List<Question> questions = questionMapper.selectByExampleWithBLOBs(new QuestionExample());
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         //把用户信息拼接到QuestionDto中
@@ -109,10 +109,10 @@ public class QuestionServiceImpl implements QuestionService {
             offset = 0;
         }
         PageHelper.startPage(offset, size);
-        //创建 Example 对象
+        //创建 Example 对象 如果要自定义对象的时候就.createCriteria方法 创建完自定义的然后把example对象传入
         QuestionExample example= new QuestionExample() ;
         example.createCriteria().andCreatorEqualTo(registerId);
-        List<Question> questions = questionMapper.selectByExample(example);
+        List<Question> questions = questionMapper.selectByExampleWithBLOBs(example);
         List<QuestionDTO> questionDTOList = new ArrayList<>();
 
         for (Question question : questions) {

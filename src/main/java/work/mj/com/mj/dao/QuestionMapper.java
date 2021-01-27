@@ -1,13 +1,10 @@
 package work.mj.com.mj.dao;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import work.mj.com.mj.pojo.Question;
 import work.mj.com.mj.pojo.QuestionExample;
 
-@Mapper
 public interface QuestionMapper {
     int countByExample(QuestionExample example);
 

@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Param;
 import work.mj.com.mj.pojo.Register;
 import work.mj.com.mj.pojo.RegisterExample;
 
-@Mapper
 public interface RegisterMapper {
     int countByExample(RegisterExample example);
 
