@@ -1,5 +1,6 @@
 package work.mj.com.mj.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import work.mj.com.mj.dao.RegisterMapper;
 import work.mj.com.mj.dto.PaginationDTO;
+import work.mj.com.mj.dto.QuestionPageInfoDTO;
+import work.mj.com.mj.pojo.Question;
 import work.mj.com.mj.pojo.Register;
 import work.mj.com.mj.pojo.RegisterExample;
 import work.mj.com.mj.service.QuestionService;
@@ -24,6 +27,15 @@ public class ProfileController {
     @Autowired
     private QuestionService questionService;
 
+    /**
+     * 右上角下拉的逻辑 展示个人的问题列表
+     * @param request
+     * @param action
+     * @param model
+     * @param page
+     * @param size
+     * @return
+     */
     @GetMapping("/profile/{action}")
     public String profile(HttpServletRequest request,
                           @PathVariable(name = "action") String action,
@@ -60,8 +72,8 @@ public class ProfileController {
             model.addAttribute("section", "replies");
             model.addAttribute("sectionName", "最新回复");
         }
-        PaginationDTO paginationDTO = questionService.list(register.getId(), page, size);
-        model.addAttribute("pagination", paginationDTO);
+        PageInfo<Question> pageInfo = questionService.list(register.getId(), page, size);
+        model.addAttribute("pagination", pageInfo);
         return "profile";
     }
 }

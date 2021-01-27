@@ -1,5 +1,6 @@
 package work.mj.com.mj.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import work.mj.com.mj.dto.PaginationDTO;
+import work.mj.com.mj.dto.QuestionPageInfoDTO;
+import work.mj.com.mj.pojo.Question;
 import work.mj.com.mj.pojo.Register;
 import work.mj.com.mj.pojo.User;
 import work.mj.com.mj.service.QuestionService;
@@ -60,8 +63,8 @@ public class ShiroController {
                 }
             }
 
-        PaginationDTO pagination = questionService.list(page, size);
-        model.addAttribute("pagination", pagination);
+        PageInfo<Question> pageInfo = questionService.list(page, size);
+        model.addAttribute("pagination", pageInfo);
 
         return "index";
     }

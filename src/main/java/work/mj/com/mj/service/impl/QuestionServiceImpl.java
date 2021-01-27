@@ -1,6 +1,7 @@
 package work.mj.com.mj.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,11 @@ import work.mj.com.mj.dao.QuestionMapper;
 import work.mj.com.mj.dao.RegisterMapper;
 import work.mj.com.mj.dto.PaginationDTO;
 import work.mj.com.mj.dto.QuestionDTO;
+import work.mj.com.mj.dto.QuestionPageInfoDTO;
 import work.mj.com.mj.pojo.Question;
 import work.mj.com.mj.pojo.QuestionExample;
 import work.mj.com.mj.pojo.Register;
+import work.mj.com.mj.pojo.RegisterExample;
 import work.mj.com.mj.service.QuestionService;
 
 import java.util.ArrayList;
@@ -33,45 +36,13 @@ public class QuestionServiceImpl implements QuestionService {
      * @return
      */
     @Override
-    public PaginationDTO list(Integer page,Integer size) {
-
-        PaginationDTO paginationDTO = new PaginationDTO();
-        Integer totalPage;
-        //问题总数
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
-
-        //把
-        if (totalCount % size == 0) {
-            totalPage = totalCount / size;
-        } else {
-            totalPage = totalCount / size + 1;
-        }
-
-        if (page<1){
-            page=1;
-        }
-
-        if (page > totalPage) {
-            page = totalPage;
-        }
-
-        paginationDTO.setPagination(totalPage,page);
-        Integer offset = size * (page - 1);
+    public PageInfo<Question> list(Integer page,Integer size) {
         //截取一段数据
-        PageHelper.startPage(offset, size);
+        PageHelper.startPage(page, size);
         List<Question> questions = questionMapper.selectByExampleWithBLOBs(new QuestionExample());
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
 
-        //把用户信息拼接到QuestionDto中
-        for (Question question : questions) {
-            Register user = registerMapper.selectByPrimaryKey(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setRegister(user);
-            questionDTOList.add(questionDTO);
-        }
-        paginationDTO.setQuestions(questionDTOList);
-        return paginationDTO;
+        PageInfo<Question> of = PageInfo.of(questions);
+        return of;
     }
 
     /**
@@ -81,50 +52,14 @@ public class QuestionServiceImpl implements QuestionService {
      * @param size
      * @return
      */
-    public PaginationDTO list(Integer registerId, Integer page, Integer size) {
-        PaginationDTO paginationDTO = new PaginationDTO();
-
-        Integer totalPage;
-
-        Integer totalCount = (int) questionMapper.countByExample(new QuestionExample());
-
-        if (totalCount % size == 0) {
-            totalPage = totalCount / size;
-        } else {
-            totalPage = totalCount / size + 1;
-        }
-
-        if (page < 1) {
-            page = 1;
-        }
-        if (page > totalPage) {
-            page = totalPage;
-        }
-
-        paginationDTO.setPagination(totalPage, page);
-
-        //size*(page-1)
-        Integer offset = size * (page - 1);
-        if (offset<0){
-            offset = 0;
-        }
-        PageHelper.startPage(offset, size);
+    public PageInfo<Question> list(Integer registerId, Integer page, Integer size) {
         //创建 Example 对象 如果要自定义对象的时候就.createCriteria方法 创建完自定义的然后把example对象传入
         QuestionExample example= new QuestionExample() ;
         example.createCriteria().andCreatorEqualTo(registerId);
         List<Question> questions = questionMapper.selectByExampleWithBLOBs(example);
-        List<QuestionDTO> questionDTOList = new ArrayList<>();
 
-        for (Question question : questions) {
-            Register user = registerMapper.selectByPrimaryKey(question.getCreator());
-            QuestionDTO questionDTO = new QuestionDTO();
-            BeanUtils.copyProperties(question, questionDTO);
-            questionDTO.setRegister(user);
-            questionDTOList.add(questionDTO);
-        }
-
-        paginationDTO.setQuestions(questionDTOList);
-        return paginationDTO;
+        PageInfo<Question> of = PageInfo.of(questions);
+        return of;
     }
 
     /**

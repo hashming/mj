@@ -18,3 +18,10 @@ mybatis:
   #驼峰命名
   configuration:
     map-underscore-to-camel-case: true
+
+pagehelper:
+  autoDialect: true
+  closeConn: true
+#  hello: 你好
+#  nihao: Hello
+  offset-as-page-num: false
