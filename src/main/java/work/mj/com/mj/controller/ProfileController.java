@@ -52,6 +52,7 @@ public class ProfileController {
                     RegisterExample registerExample = new RegisterExample();
                     registerExample.createCriteria().andTokenEqualTo(token);
                     List<Register> registers = registerMapper.selectByExample(registerExample);
+                    register = registers.get(0);
                     if (registers.size() != 0) {
                         request.getSession().setAttribute("name",registers.get(0));
                     }

@@ -56,6 +56,7 @@ public class QuestionServiceImpl implements QuestionService {
         //创建 Example 对象 如果要自定义对象的时候就.createCriteria方法 创建完自定义的然后把example对象传入
         QuestionExample example= new QuestionExample() ;
         example.createCriteria().andCreatorEqualTo(registerId);
+        PageHelper.startPage(page, size);
         List<Question> questions = questionMapper.selectByExampleWithBLOBs(example);
 
         PageInfo<Question> of = PageInfo.of(questions);
@@ -90,13 +91,12 @@ public class QuestionServiceImpl implements QuestionService {
             //创建
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
-            questionMapper.insert(question);
+            questionMapper.insertSelective(question);
 //            questionMapper.create(question);
         } else {
             //更新
-            question.setGmtModified(question.getGmtCreate());
-            questionMapper.updateByPrimaryKey(question);
-//            questionMapper.update(question);
+            question.setGmtModified(System.currentTimeMillis());
+            questionMapper.updateByPrimaryKeySelective(question);
         }
     }
 
