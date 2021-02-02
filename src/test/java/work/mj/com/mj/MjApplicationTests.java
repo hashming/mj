@@ -29,18 +29,8 @@ class MjApplicationTests {
 
     @Test
     void contextLoads() {
-        /*RegisterExample registerExample = new RegisterExample();
-        registerExample.createCriteria().andTokenEqualTo("4bd14452-b7f6-4bbe-89ac-94e7ff37033b");
-        System.out.println(registerMapper.selectByExample(registerExample));*/
-        Question question = new Question();
-        question.setId(27);
-        question.setTitle("十多块");
-        question.setCreator(45);
-        question.setTag("滚滚滚");
-        question.setDescription("快递费坚实的房间阿斯蒂芬");
-//        question.setId();
-//        int i = questionMapper.updateByPrimaryKey(question);
-        questionMapper.updateByPrimaryKeyWithBLOBs(question);
+        User duo = userMapper.selectByPrimaryKey("duo");
+        System.out.println(duo);
     }
 
 

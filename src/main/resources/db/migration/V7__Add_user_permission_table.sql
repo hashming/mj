@@ -1,0 +1,1 @@
+alter table user add permission varchar(256) null;

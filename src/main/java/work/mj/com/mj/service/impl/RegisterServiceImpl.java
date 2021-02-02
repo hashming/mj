@@ -17,7 +17,7 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     public void setRegister(String registername,String token) {
         //头像链接
-        String avatar_url = "https://profile.csdnimg.cn/C/8/1/2_haoduoduoyu";
+        String avatar_url = "https://cdn.jsdelivr.net/gh/hashming/PictureBed/data/20210202141338.png";
         //登录的用户信息数据库
         Register register = new Register();
         register.setToken(token);
